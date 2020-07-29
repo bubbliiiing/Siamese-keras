@@ -58,7 +58,7 @@ img/Angelic_02.png
 
 ### 训练步骤
 可参考我的CSDN博客https://blog.csdn.net/weixin_44791964/article/details/107343394
-## 1、训练Omniglot例子  
+#### 1、训练Omniglot例子  
 Omniglot数据集中数据存放格式有三级：
 ```python
 - image_background
@@ -76,7 +76,7 @@ Omniglot数据集中数据存放格式有三级：
 训练步骤为：  
 a、下载数据集，放在根目录下的dataset文件夹下。     
 b、运行train.py开始训练。   
-## 2、训练自己相似性比较的模型
+#### 2、训练自己相似性比较的模型
 如果大家想要训练自己的数据集，可以将数据集按照如下格式进行摆放。    
 ```python
 - image_background
