@@ -35,7 +35,6 @@ vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5是vgg的权重，可以用于�
 img/street.jpg
 ```
 可完成预测。  
-。  
 #### 2、使用自己训练的权重
 a、按照训练步骤训练。  
 b、在siamese.py文件里面，在如下部分修改model_path使其对应训练好的文件；**model_path对应logs文件夹下面的权值文件**。  
@@ -54,17 +53,17 @@ d、利用video.py可进行摄像头检测。
 
 ### 训练步骤
 ## 1、训练本文所使用的Omniglot例子
-![1](https://img-blog.csdnimg.cn/20200714212548476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDc5MTk2NA==,size_16,color_FFFFFF,t_70#pic_center =250x)
-下载数据集，放在根目录下的dataset文件夹下。
-![2](https://img-blog.csdnimg.cn/20200714212649786.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDc5MTk2NA==,size_16,color_FFFFFF,t_70#pic_center =250x)
-运行train.py开始训练。
+![1](https://img-blog.csdnimg.cn/20200714212548476.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDc5MTk2NA==,size_16,color_FFFFFF,t_70)
+下载数据集，放在根目录下的dataset文件夹下。   
+![2](https://img-blog.csdnimg.cn/20200714212649786.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDc5MTk2NA==,size_16,color_FFFFFF,t_70)
+运行train.py开始训练。  
 ![3](https://img-blog.csdnimg.cn/20200714212953877.png)
 ## 2、训练自己相似性比较的模型
-如果大家想要训练自己的数据集，可以将数据集按照如下格式进行摆放。
-![4](https://img-blog.csdnimg.cn/20200717132416288.png#pic_center =250x)
-每一个chapter里面放同类型的图片。
-之后将train.py当中的train_own_data设置成True，即可开始训练。
-![5](https://img-blog.csdnimg.cn/20200717132625692.png#pic_center =400x)
+如果大家想要训练自己的数据集，可以将数据集按照如下格式进行摆放。   
+![4](https://img-blog.csdnimg.cn/20200717132416288.png)
+每一个chapter里面放同类型的图片。   
+之后将train.py当中的train_own_data设置成True，即可开始训练。   
+![5](https://img-blog.csdnimg.cn/20200717132625692.png)
 
 ### Reference
 https://github.com/qqwweee/keras-yolo3/  
