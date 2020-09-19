@@ -124,9 +124,9 @@ class Generator:
             # cv2.imwrite("img/"+str(pair)+"_1"+".jpg",np.uint8(image),)
             image = image / 255
             if self.channel == 1:
-                pairs_of_images[0][pair, :, :, 0] = image
+                pairs_of_images[1][pair, :, :, 0] = image
             else:
-                pairs_of_images[0][pair, :, :, :] = image
+                pairs_of_images[1][pair, :, :, :] = image
             if (pair + 1) % 2 == 0:
                 labels[pair] = 0
             else:
