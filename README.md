@@ -22,7 +22,7 @@ keras==2.1.5
 
 ### 文件下载
 训练所需的vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5可在百度网盘中下载。    
-链接: https://pan.baidu.com/s/1yGHzvVniW_JMgONYaJYxkw 提取码: 4qci  
+链接: https://pan.baidu.com/s/1FO0t-jHy9oyhnXNLz_LldQ 提取码: 17zy 
 我一共会提供两个权重，分别是vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5和Omniglot_vgg.h5。   
 其中:  
 Omniglot_vgg.h5是Omniglot训练好的权重，可直接使用进行下面的预测步骤。  
