@@ -147,7 +147,7 @@ class Generator:
         if train:
             available_characters = self._train_chapters
         else:
-            available_characters = self._train_chapters
+            available_characters = self._validation_chapters 
 
         while 1:
             number_of_characters = len(available_characters)
