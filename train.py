@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # 学习率下降的方式，acc三次不下降就下降学习率继续训练
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, verbose=1)
     # 是否需要早停，当val_loss一直不下降的时候意味着模型基本训练完毕，可以停止
-    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=6, verbose=1)
+    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=1)
     # tensorboard
     tensorboard = TensorBoard(log_dir=log_dir)
 
