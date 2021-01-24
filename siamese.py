@@ -15,8 +15,8 @@ from nets.siamese import siamese
 #---------------------------------------------------#
 class Siamese(object):
     _defaults = {
-        "model_path": 'model_data/Omniglot_vgg.h5',
-        "input_shape" : (105, 105, 3),
+        "model_path"    : 'model_data/Omniglot_vgg.h5',
+        "input_shape"   : (105, 105, 3),
     }
 
     @classmethod
