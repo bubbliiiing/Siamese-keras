@@ -1,18 +1,19 @@
-import keras
-from keras.layers import Input,Dense,Conv2D
-from keras.layers import MaxPooling2D,Flatten
-from keras.models import Model
 import os
+
+import keras
 import numpy as np
-from PIL import Image
+from keras.layers import Conv2D, Dense, Flatten, Input, MaxPooling2D
+from keras.models import Model
 from keras.optimizers import SGD
+from PIL import Image
+
 
 class VGG16:
     def __init__(self):
         # 第一个卷积部分
         # 105, 105, 3 -> 105, 105, 64 -> 52, 52, 64
         self.block1_conv1 = Conv2D(64,(3,3),activation = 'relu',padding = 'same',name = 'block1_conv1')
-        self.block1_conv2 = Conv2D(64,(3,3),activation = 'relu',padding = 'same', name = 'block1_conv2')
+        self.block1_conv2 = Conv2D(64,(3,3),activation = 'relu',padding = 'same',name = 'block1_conv2')
         self.block1_pool = MaxPooling2D((2,2), strides = (2,2), name = 'block1_pool')
         
         # 第二个卷积部分
