@@ -1,11 +1,9 @@
-import colorsys
 import os
 
-import keras
 import matplotlib.pyplot as plt
 import numpy as np
 from keras import backend as K
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 from nets.siamese import siamese
 
@@ -15,7 +13,14 @@ from nets.siamese import siamese
 #---------------------------------------------------#
 class Siamese(object):
     _defaults = {
+        #-----------------------------------------------------#
+        #   使用自己训练好的模型进行预测一定要修改model_path
+        #   model_path指向logs文件夹下的权值文件
+        #-----------------------------------------------------#
         "model_path"    : 'model_data/Omniglot_vgg.h5',
+        #-----------------------------------------------------#
+        #   输入图片的大小。
+        #-----------------------------------------------------#
         "input_shape"   : (105, 105, 3),
     }
 
@@ -45,18 +50,18 @@ class Siamese(object):
         #---------------------------#
         self.model = siamese(self.input_shape)
         self.model.load_weights(self.model_path)
-        print('{} model, anchors, and classes loaded.'.format(model_path))
+        print('{} model loaded.'.format(model_path))
     
     def letterbox_image(self, image, size):
-        image = image.convert("RGB")
-        iw, ih = image.size
-        w, h = size
-        scale = min(w/iw, h/ih)
-        nw = int(iw*scale)
-        nh = int(ih*scale)
+        image   = image.convert("RGB")
+        iw, ih  = image.size
+        w, h    = size
+        scale   = min(w/iw, h/ih)
+        nw      = int(iw*scale)
+        nh      = int(ih*scale)
 
-        image = image.resize((nw,nh), Image.BICUBIC)
-        new_image = Image.new('RGB', size, (255,255,255))
+        image       = image.resize((nw,nh), Image.BICUBIC)
+        new_image   = Image.new('RGB', size, (255,255,255))
         new_image.paste(image, ((w-nw)//2, (h-nh)//2))
         if self.input_shape[-1]==1:
             new_image = new_image.convert("L")
@@ -75,23 +80,23 @@ class Siamese(object):
         #---------------------------------------------------#
         #   对输入图像进行归一化
         #---------------------------------------------------#
-        image_1 = np.asarray(image_1).astype(np.float64)/255
-        image_2 = np.asarray(image_2).astype(np.float64)/255
+        image_1 = np.asarray(image_1).astype(np.float64) / 255
+        image_2 = np.asarray(image_2).astype(np.float64) / 255
         
-        if self.input_shape[-1]==1:
+        if self.input_shape[-1] == 1:
             image_1 = np.expand_dims(image_1, -1)
             image_2 = np.expand_dims(image_2, -1)
             
         #---------------------------------------------------#
         #   添加上batch维度，才可以放入网络中预测
         #---------------------------------------------------#
-        photo1 = np.expand_dims(image_1,0)
-        photo2 = np.expand_dims(image_2,0)
+        photo1 = np.expand_dims(image_1, 0)
+        photo2 = np.expand_dims(image_2, 0)
 
         #---------------------------------------------------#
         #   获得预测结果，output输出为概率
         #---------------------------------------------------#
-        output = self.model.predict([photo1,photo2])[0]
+        output = self.model.predict([photo1, photo2])[0]
 
         plt.subplot(1, 2, 1)
         plt.imshow(np.array(image_1))
