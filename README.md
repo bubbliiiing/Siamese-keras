@@ -2,23 +2,28 @@
 ---
 
 ## 目录
-1. [实现的内容 Achievement](#实现的内容)
-2. [所需环境 Environment](#所需环境)
-3. [注意事项 Attention](#注意事项)
+1. [仓库更新 Top News](#仓库更新)
+2. [注意事项 Attention](#注意事项)
+3. [所需环境 Environment](#所需环境)
 4. [文件下载 Download](#文件下载)
 5. [预测步骤 How2predict](#预测步骤)
 6. [训练步骤 How2train](#训练步骤)
 7. [参考资料 Reference](#Reference)
 
-## 实现的内容
+## Top News
+**`2022-03`**:**进行了大幅度的更新，支持step、cos学习率下降法、支持adam、sgd优化器选择、支持学习率根据batch_size自适应调整。**  
+BiliBili视频中的原仓库地址为：https://github.com/bubbliiiing/classification-pytorch/tree/bilibili
+
+**`2021-01`**:**仓库创建，支持模型训练，大量的注释，多个可调整参数。支持top1-top5的准确度评价。**   
+
+## 注意事项
+**训练Omniglot数据集和训练自己的数据集可以采用两种不同的格式**。需要注意格式的摆放噢！  
+
 该仓库实现了孪生神经网络（Siamese network），该网络常常用于检测输入进来的两张图片的相似性。该仓库所使用的主干特征提取网络（backbone）为VGG16。  
 
 ## 所需环境
 tensorflow-gpu==1.13.1  
 keras==2.1.5  
-
-## 注意事项
-**训练Omniglot数据集和训练自己的数据集可以采用两种不同的格式**。需要注意格式的摆放噢！  
 
 ## 文件下载
 训练所需的vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5可在百度网盘中下载。    
