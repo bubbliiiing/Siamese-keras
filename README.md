@@ -11,10 +11,8 @@
 7. [参考资料 Reference](#Reference)
 
 ## Top News
-**`2022-03`**:**进行了大幅度的更新，支持step、cos学习率下降法、支持adam、sgd优化器选择、支持学习率根据batch_size自适应调整。**  
-BiliBili视频中的原仓库地址为：https://github.com/bubbliiiing/classification-pytorch/tree/bilibili
-
-**`2021-01`**:**仓库创建，支持模型训练，大量的注释，多个可调整参数。支持top1-top5的准确度评价。**   
+**`2022-04`**:**进行了大幅度的更新，支持step、cos学习率下降法、支持adam、sgd优化器选择、支持学习率根据batch_size自适应调整。**  
+BiliBili视频中的原仓库地址为：https://github.com/bubbliiiing/siamese-keras/tree/bilibili
 
 ## 注意事项
 **训练Omniglot数据集和训练自己的数据集可以采用两种不同的格式**。需要注意格式的摆放噢！  
