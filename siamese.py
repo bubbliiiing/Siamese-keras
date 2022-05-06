@@ -6,7 +6,8 @@ from keras import backend as K
 from PIL import Image
 
 from nets.siamese import siamese
-from utils.utils import letterbox_image, preprocess_input, cvtColor
+from utils.utils import (cvtColor, letterbox_image, preprocess_input,
+                         show_config)
 
 
 #---------------------------------------------------#
@@ -42,8 +43,14 @@ class Siamese(object):
     #---------------------------------------------------#
     def __init__(self, **kwargs):
         self.__dict__.update(self._defaults)
+        for name, value in kwargs.items():
+            setattr(self, name, value)
+            
         self.sess = K.get_session()
+        
         self.generate()
+        
+        show_config(**self._defaults)
         
     #---------------------------------------------------#
     #   载入模型

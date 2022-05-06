@@ -1,6 +1,7 @@
 import datetime
 import os
 
+import tensorflow as tf
 from keras.callbacks import (EarlyStopping, LearningRateScheduler,
                              ModelCheckpoint, ReduceLROnPlateau, TensorBoard)
 from keras.optimizers import SGD, Adam
@@ -10,8 +11,9 @@ from nets.siamese import siamese
 from utils.callbacks import (ExponentDecayScheduler, LossHistory,
                              ParallelModelCheckpoint)
 from utils.dataloader import Datasets
-from utils.utils import get_lr_scheduler, load_dataset
+from utils.utils import get_lr_scheduler, load_dataset, show_config
 
+tf.logging.set_verbosity(tf.logging.ERROR)
 
 if __name__ == "__main__":
     #---------------------------------------------------------------------#
@@ -105,9 +107,9 @@ if __name__ == "__main__":
     #------------------------------------------------------------------#
     lr_decay_type       = 'cos'
     #------------------------------------------------------------------#
-    #   save_period     多少个epoch保存一次权值，默认每个世代都保存
+    #   save_period     多少个epoch保存一次权值
     #------------------------------------------------------------------#
-    save_period         = 1
+    save_period         = 10
     #------------------------------------------------------------------#
     #   save_dir        权值与日志文件保存的文件夹
     #------------------------------------------------------------------#
@@ -147,6 +149,26 @@ if __name__ == "__main__":
     num_train   = len(train_lines)
     num_val     = len(val_lines)
     
+    show_config(
+        model_path = model_path, input_shape = input_shape, \
+        Init_Epoch = Init_Epoch, Epoch = Epoch, batch_size = batch_size, \
+        Init_lr = Init_lr, Min_lr = Min_lr, optimizer_type = optimizer_type, momentum = momentum, lr_decay_type = lr_decay_type, \
+        save_period = save_period, save_dir = save_dir, num_workers = num_workers, num_train = num_train, num_val = num_val
+    )
+    #---------------------------------------------------------#
+    #   总训练世代指的是遍历全部数据的总次数
+    #   总训练步长指的是梯度下降的总次数 
+    #   每个训练世代包含若干训练步长，每个训练步长进行一次梯度下降。
+    #   此处仅建议最低训练世代，上不封顶，计算时只考虑了解冻部分
+    #----------------------------------------------------------#
+    wanted_step = 3e4 if optimizer_type == "sgd" else 1e4
+    total_step  = num_train // batch_size * Epoch
+    if total_step <= wanted_step:
+        wanted_epoch = wanted_step // (num_train // batch_size) + 1
+        print("\n\033[1;33;44m[Warning] 使用%s优化器时，建议将训练总步长设置到%d以上。\033[0m"%(optimizer_type, wanted_step))
+        print("\033[1;33;44m[Warning] 本次运行的总训练数据量为%d，batch_size为%d，共训练%d个Epoch，计算出总训练步长为%d。\033[0m"%(num_train, batch_size, Epoch, total_step))
+        print("\033[1;33;44m[Warning] 由于总训练步长为%d，小于建议总步长%d，建议设置总世代为%d。\033[0m"%(total_step, wanted_step, wanted_epoch))
+    
     #-------------------------------------------------------------#
     #   训练分为两个阶段，两阶段初始的学习率不同，手动调节了学习率
     #   显存不足与数据集大小无关，提示显存不足请调小batch_size。
@@ -155,7 +177,7 @@ if __name__ == "__main__":
         #-------------------------------------------------------------------#
         #   判断当前batch_size，自适应调整学习率
         #-------------------------------------------------------------------#
-        nbs             = 32
+        nbs             = 64
         lr_limit_max    = 1e-3 if optimizer_type == 'adam' else 1e-1
         lr_limit_min    = 3e-4 if optimizer_type == 'adam' else 5e-4
         Init_lr_fit     = min(max(batch_size / nbs * Init_lr, lr_limit_min), lr_limit_max)
@@ -194,13 +216,21 @@ if __name__ == "__main__":
         if ngpus_per_node > 1:
             checkpoint      = ParallelModelCheckpoint(model_body, os.path.join(save_dir, "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5"), 
                                     monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = save_period)
+            checkpoint_last = ParallelModelCheckpoint(model_body, os.path.join(save_dir, "last_epoch_weights.h5"), 
+                                    monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = 1)
+            checkpoint_best = ParallelModelCheckpoint(model_body, os.path.join(save_dir, "best_epoch_weights.h5"), 
+                                    monitor = 'val_loss', save_weights_only = True, save_best_only = True, period = 1)
         else:
             checkpoint      = ModelCheckpoint(os.path.join(save_dir, "ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5"), 
                                     monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = save_period)
+            checkpoint_last = ModelCheckpoint(os.path.join(save_dir, "last_epoch_weights.h5"), 
+                                    monitor = 'val_loss', save_weights_only = True, save_best_only = False, period = 1)
+            checkpoint_best = ModelCheckpoint(os.path.join(save_dir, "best_epoch_weights.h5"), 
+                                    monitor = 'val_loss', save_weights_only = True, save_best_only = True, period = 1)
         early_stopping  = EarlyStopping(monitor='val_loss', min_delta = 0, patience = 10, verbose = 1)
         lr_scheduler    = LearningRateScheduler(lr_scheduler_func, verbose = 1)
-        callbacks       = [logging, loss_history, checkpoint, lr_scheduler]
-        
+        callbacks       = [logging, loss_history, checkpoint, checkpoint_last, checkpoint_best, lr_scheduler]
+            
         print('Train on {} samples, val on {} samples, with batch size {}.'.format(num_train, num_val, batch_size))
         model.fit_generator(
             generator           = train_dataset,
